@@ -17,13 +17,13 @@ class RoundButton extends StatelessWidget {
     return InkWell(
       onTap: onPress,
       child: Container(
-        height: height * 0.4,
-            width: width * 0.99,
+        height: height * .05,
+            width: width * 0.9,
             decoration: BoxDecoration(
               color: AppColor.pinkColor,
               borderRadius: BorderRadius.circular(10),
             ),
-        child:loading ? LoadingIndicator(indicatorType: Indicator.ballClipRotate,colors: [AppColor.pinkColor],) :  Center(child: Text(title),),
+        child:loading ? LoadingIndicator(indicatorType: Indicator.ballClipRotate,colors: [AppColor.whiteColor],) :  Center(child: Text(title,style: TextStyle(color: AppColor.whiteColor),),),
       ),
     );
   }

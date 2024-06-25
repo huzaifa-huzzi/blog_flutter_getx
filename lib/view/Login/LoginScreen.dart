@@ -51,67 +51,76 @@ class _LoginScreenState extends State<LoginScreen> {
          ),
         body: SafeArea(
           child:Obx((){
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Form(
-                    child: Column(
-                      children: [
-                        InputField(myController:controller.emailController.value, focusNode: controller.emailFocus.value, onFieldSubmitted: (value){
-                           Utils.fieldFocusChange(context, controller.emailFocus.value,controller.passwordFocus.value );
-                        }, obsecureText: false, hint:'Em_ail'.tr , keyboardType: TextInputType.text, onValidator: (value){
-                          if(value!.isEmpty){
-                            Utils.snackBar('Em_ail'.tr, '_email'.tr);
-                          }
-                        }, icon:Icons.email),
-                        SizedBox(height: height * .02,),
-                        InputField(myController: controller.passwordController.value, focusNode: controller.passwordFocus.value, onFieldSubmitted: (value){}, obsecureText: true, hint: 'pass_word'.tr, keyboardType: TextInputType.number, onValidator: (value){
-                          if(value!.isEmpty){
-                            Utils.snackBar('pass_word'.tr, '_email'.tr);
-                          }
-                        }, icon: Icons.lock)
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: width * .04),
+                    child: Form(
+                      key:_formkey ,
+                        child: Column(
+                          children: [
+                            InputField(myController:controller.emailController.value, focusNode: controller.emailFocus.value, onFieldSubmitted: (value){
+                               Utils.fieldFocusChange(context, controller.emailFocus.value,controller.passwordFocus.value );
+                            }, obsecureText: false, hint:'Em_ail'.tr , keyboardType: TextInputType.text, onValidator: (value){
+                              if(value!.isEmpty){
+                                Utils.snackBar('Em_ail'.tr, '_email'.tr);
+                              }
+                            }, icon:Icons.email),
+                            SizedBox(height: height * .02,),
+                            InputField(myController: controller.passwordController.value, focusNode: controller.passwordFocus.value, onFieldSubmitted: (value){}, obsecureText: true, hint: 'pass_word'.tr, keyboardType: TextInputType.number, onValidator: (value){
+                              if(value!.isEmpty){
+                                Utils.snackBar('pass_word'.tr, '_email'.tr);
+                              }
+                            }, icon: Icons.lock)
 
-                      ],
-                    )
-
-                ),
-                SizedBox(height: height * 0.2,),
-                 Text.rich(
-                     TextSpan(
-                             style: TextStyle(),
-                                children: [
-                                TextSpan(
-                                  text: 'Forgot Passowrd ',
-                                 style: TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
-                                )
-                                ]
-                     ),
-                 ),
-                SizedBox(height: height * 0.2,),
-                RoundButton(title: 'Login', onPress: (){
-                    if(_formkey.currentState!.validate()){
-                      String email = controller.emailController.value.text;
-                      String password = controller.passwordController.value.text;
-                      controller.loginFtn(email, password, context);
-                    }
-                }),
-                SizedBox(height: height * 0.2 ,),
-                Text.rich(
-                  TextSpan(
-                      text: 'Dont Have an Account ?',
-                      style: TextStyle(),
-                      children: [
-                        TextSpan(
-                          text: 'Sign Up ',
-                          style: TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
+                          ],
                         )
-                      ]
+
+                    ),
+                  ),
+                  SizedBox(height: height * .04,),
+                   Padding(
+                     padding: EdgeInsets.only(left: width * 0.48),
+                     child: Text.rich(
+                         TextSpan(
+                                 style: TextStyle(),
+                                    children: [
+                                    TextSpan(
+                                      text: 'Forgot Passowrd ? ',
+                                     style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
+                                    )
+                                    ]
+                         ),
+                     ),
+                   ),
+                  SizedBox(height: height * .04,),
+                  RoundButton(title: 'Login', onPress: (){
+                      if(_formkey.currentState!.validate()){
+                        String email = controller.emailController.value.text;
+                        String password = controller.passwordController.value.text;
+                        controller.loginFtn(email, password, context);
+                      }
+                  }),
+                  SizedBox(height: height * .04 ,),
+                  Text.rich(
+                    TextSpan(
+                        text: 'Dont Have an Account ?',
+                        style: TextStyle(),
+                        children: [
+                          TextSpan(
+                            text: 'Sign Up ',
+                            style: TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
+                          )
+                        ]
+                    ),
+
                   ),
 
-                ),
-
-              ],
+                ],
+              ),
             );
           }),
           

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "344416482955",
+    "project_id": "blog-fluttergetx",
+    "storage_bucket": "blog-fluttergetx.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344416482955:android:3505d4c559d024589e868e",
+        "android_client_info": {
+          "package_name": "com.blog.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9Z5la2wEhAFRbTKnwWa4k4m2VkDY0h3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
