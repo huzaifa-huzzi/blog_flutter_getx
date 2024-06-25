@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                      ),
                    ),
                   SizedBox(height: height * .04,),
-                  RoundButton(title: 'Login', onPress: (){
+                  RoundButton(title:'_login'.tr, onPress: (){
                       if(_formkey.currentState!.validate()){
                         String email = controller.emailController.value.text;
                         String password = controller.passwordController.value.text;

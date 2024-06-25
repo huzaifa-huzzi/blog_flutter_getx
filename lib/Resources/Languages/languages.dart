@@ -15,7 +15,8 @@ class Languages extends Translations{
        'Em_ail':'Email',
        '_email' : 'Enter Email',
        'pass_word':'Password',
-       '_password':'Enter Password'
+       '_password':'Enter Password',
+        '_login' : 'Login'
 
   },
 
