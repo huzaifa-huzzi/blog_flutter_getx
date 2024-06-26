@@ -1,6 +1,7 @@
 import 'package:blog_flutter_getx/Resources/Color/colors.dart';
 import 'package:blog_flutter_getx/Resources/Components/RoundButton/RoundButton.dart';
 import 'package:blog_flutter_getx/Resources/Components/TextInputField/InputField.dart';
+import 'package:blog_flutter_getx/Routes/Routes_name.dart';
 import 'package:blog_flutter_getx/Utils/Utils.dart';
 import 'package:blog_flutter_getx/view_model/Controller/Login/LoginController.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                      ),
                    ),
                   SizedBox(height: height * .04,),
-                  RoundButton(title:'_login'.tr, onPress: (){
+                  RoundButton(title:'_login'.tr,loading: controller.loading.value, onPress: (){
                       if(_formkey.currentState!.validate()){
                         String email = controller.emailController.value.text;
                         String password = controller.passwordController.value.text;
@@ -105,18 +106,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                   }),
                   SizedBox(height: height * .04 ,),
-                  Text.rich(
-                    TextSpan(
-                        text: 'Dont Have an Account ?',
-                        style: TextStyle(),
-                        children: [
-                          TextSpan(
-                            text: 'Sign Up ',
-                            style: TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
-                          )
-                        ]
-                    ),
+                  InkWell(
+                    onTap: (){
+                      Get.toNamed(RouteName.signupScreen);
+                    },
+                    child: Text.rich(
+                      TextSpan(
+                          text: 'Dont Have an Account ?',
+                          style: TextStyle(),
+                          children: [
+                            TextSpan(
+                              text: 'Sign Up ',
+                              style: TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
+                            )
+                          ]
+                      ),
 
+                    ),
                   ),
 
                 ],

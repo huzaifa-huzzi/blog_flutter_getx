@@ -3,6 +3,7 @@ import 'package:blog_flutter_getx/Routes/Routes_name.dart';
 import 'package:blog_flutter_getx/view/Home/Home_Screen.dart';
 import 'package:blog_flutter_getx/view/Login/LoginScreen.dart';
 import 'package:blog_flutter_getx/view/SplashScreen/splash_Screen.dart';
+import 'package:blog_flutter_getx/view/signup/SignUp_Screen.dart';
 import 'package:get/get.dart';
 
 class AppRoutes{
@@ -12,6 +13,7 @@ class AppRoutes{
     //view
     GetPage(name: RouteName.homeScreen, page: () =>const HomeScreen()),
     GetPage(name: RouteName.loginScreen, page: () =>const LoginScreen()),
+    GetPage(name: RouteName.signupScreen, page: () =>const SignUp()),
 
   ];
 

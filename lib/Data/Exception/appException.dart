@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class AppException implements Exception{
 
   final _message;
@@ -24,4 +26,9 @@ class InvalidUrl extends AppException {
 
 class FetchDataException extends AppException {
   FetchDataException ([String? message]) :super (message,'Fetch Exception');
+}
+
+
+class ErrorException extends AppException {
+  ErrorException ([String? message]) :super (message,'_Exception'.tr);
 }

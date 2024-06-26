@@ -16,7 +16,18 @@ class Languages extends Translations{
        '_email' : 'Enter Email',
        'pass_word':'Password',
        '_password':'Enter Password',
-        '_login' : 'Login'
+        '_login' : 'Login',
+         '_Account' : 'HAve an Account',
+         '_sign' : 'Signup',
+          '_signup Succesful' : 'SignUp Successful',
+           '_user' : 'user',
+            '_user Authentication' : 'User Authenticated',
+             '_Exception' :'Due to Some We could not complete your request',
+            '_signin' : 'Sign in',
+            '_signin successful' : ' Signin successful  ',
+             '_Registartion' : 'Registered',
+             '_Registration successful' : 'Registration successful '
+
 
   },
 
