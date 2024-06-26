@@ -17,7 +17,7 @@ class AppRoutes{
     GetPage(name: RouteName.loginScreen, page: () =>const LoginScreen()),
     GetPage(name: RouteName.signupScreen, page: () =>const SignUp()),
     GetPage(name: RouteName.forgotScreen, page: () =>const ForgotPassword()),
-    GetPage(name: RouteName.dashboardScreen, page: () =>const DashBoardScreen()),
+    GetPage(name: RouteName.dashboardScreen, page: () =>const DashboardScreen()),
 
 
   ];
