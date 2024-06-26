@@ -117,7 +117,7 @@ class _SignUpState extends State<SignUp> {
                         style:const  TextStyle(),
                         children: [
                           TextSpan(
-                            text: '_login'.tr,
+                            text: '_signin'.tr,
                             style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
                           )
                         ]
