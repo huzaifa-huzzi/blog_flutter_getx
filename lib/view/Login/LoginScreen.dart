@@ -4,7 +4,6 @@ import 'package:blog_flutter_getx/Resources/Components/TextInputField/InputField
 import 'package:blog_flutter_getx/Routes/Routes_name.dart';
 import 'package:blog_flutter_getx/Utils/Utils.dart';
 import 'package:blog_flutter_getx/view_model/Controller/Login/LoginController.dart';
-import 'package:blog_flutter_getx/view_model/Services/SessionManager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final width = MediaQuery.sizeOf(context).width * 1;
     return Scaffold(
          appBar: AppBar(
-           title: Text(SessionManager().userId.toString(),style:GoogleFonts.lato(
+           title: Text('Login Screen',style:GoogleFonts.lato(
         textStyle: TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.bold,
@@ -86,16 +85,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: height * .04,),
                    Padding(
                      padding: EdgeInsets.only(left: width * 0.48),
-                     child: Text.rich(
-                         TextSpan(
-                                 style: TextStyle(),
-                                    children: [
-                                    TextSpan(
-                                      text: 'Forgot Passowrd ? ',
-                                     style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
-                                    )
-                                    ]
-                         ),
+                     child: InkWell(
+                       onTap: (){
+                         Get.toNamed(RouteName.forgotScreen);
+                       },
+                       child: Text.rich(
+                           TextSpan(
+                                   style: TextStyle(),
+                                      children: [
+                                      TextSpan(
+                                        text: 'Forgot Passowrd ? ',
+                                       style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18,color: AppColor.pinkColor),
+                                      )
+                                      ]
+                           ),
+                       ),
                      ),
                    ),
                   SizedBox(height: height * .04,),

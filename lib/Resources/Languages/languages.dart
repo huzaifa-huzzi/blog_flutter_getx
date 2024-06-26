@@ -26,7 +26,8 @@ class Languages extends Translations{
             '_signin' : 'Sign in',
             '_signin successful' : ' Signin successful  ',
              '_Registartion' : 'Registered',
-             '_Registration successful' : 'Registration successful '
+             '_Registration successful' : 'Registration successful ',
+              '_message Forgot' : 'We have Send you email,Kindly check it out',
 
 
   },

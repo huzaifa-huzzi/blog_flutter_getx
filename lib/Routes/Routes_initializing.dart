@@ -1,5 +1,6 @@
 
 import 'package:blog_flutter_getx/Routes/Routes_name.dart';
+import 'package:blog_flutter_getx/view/Forgot%20Password/Forgot_Password.dart';
 import 'package:blog_flutter_getx/view/Home/Home_Screen.dart';
 import 'package:blog_flutter_getx/view/Login/LoginScreen.dart';
 import 'package:blog_flutter_getx/view/SplashScreen/splash_Screen.dart';
@@ -14,6 +15,7 @@ class AppRoutes{
     GetPage(name: RouteName.homeScreen, page: () =>const HomeScreen()),
     GetPage(name: RouteName.loginScreen, page: () =>const LoginScreen()),
     GetPage(name: RouteName.signupScreen, page: () =>const SignUp()),
+    GetPage(name: RouteName.forgotScreen, page: () =>const ForgotPassword()),
 
   ];
 
