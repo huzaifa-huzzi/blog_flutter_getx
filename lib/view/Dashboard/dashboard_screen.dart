@@ -1,4 +1,5 @@
 import 'package:blog_flutter_getx/Resources/Color/colors.dart';
+import 'package:blog_flutter_getx/view/Camera_Screen.dart';
 import 'package:blog_flutter_getx/view/Home/Home_Screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,18 +23,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   List<Widget> _buildScreens() {
   return [
-  HomeScreen(),
+ const  HomeScreen(),
+  const   CameraScreen(),
   ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
   return [
-  PersistentBottomNavBarItem(
-  icon: Icon(Icons.home),
-  title: ("Home"),
-  activeColorPrimary: CupertinoColors.activeBlue,
-  inactiveColorPrimary: CupertinoColors.systemGrey,
-  ),
+    PersistentBottomNavBarItem(
+      icon:const  Icon(Icons.home),
+      activeColorPrimary: CupertinoColors.activeBlue,
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+    PersistentBottomNavBarItem(
+      icon:const  Icon(Icons.camera_enhance_outlined),
+      activeColorPrimary: CupertinoColors.activeBlue,
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
   ];
   }
 
