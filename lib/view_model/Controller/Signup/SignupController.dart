@@ -9,59 +9,52 @@ import 'package:get/get.dart';
 
 class SignUpController extends GetxController {
 
-  // Firebase Authentication
   final auth = FirebaseAuth.instance;
   final ref = FirebaseDatabase.instance.ref().child('user');
 
-
-
-  //for Controllers
   final emailController = TextEditingController().obs;
   final passwordController = TextEditingController().obs;
 
-  //for the Focusing
   final emailFocus = FocusNode().obs;
   final passwordFocus = FocusNode().obs;
 
-  // for loading
   RxBool loading = false.obs;
 
-  // All Functions
-
-  void signUpFtn(String email,String password,BuildContext context)async{
+  void signUpFtn(String email, String password, BuildContext context) async {
     loading.value = true;
 
     try {
-      auth.createUserWithEmailAndPassword(email: email, password: password).then((value){
+      if (password.length < 6) {
+        throw AppException('Password should be at least 6 characters long');
+      }
+
+      await auth.createUserWithEmailAndPassword(email: email, password: password).then((value) {
         SessionManager().userId = value.user!.uid.toString();
         Utils.snackBar('_signin'.tr, '_signin successful'.tr);
         Get.toNamed(RouteName.homeScreen);
         ref.child(value.user!.uid.toString()).set({
-          'uid':value.user!.uid.toString(),
-          'email':value.user!.email.toString(),
-          'returnSecureToken':true,
-
-        }).then((value){
-          Utils.snackBar('_Registartion'.tr,  '_Registration successful'.tr);
+          'uid': value.user!.uid.toString(),
+          'email': value.user!.email.toString(),
+          'returnSecureToken': true,
+        }).then((_) {
+          Utils.snackBar('_Registration'.tr, '_Registration successful'.tr);
           loading.value = false;
-        }).onError((error, stackTrace){
-         Utils.toastMessage(error.toString());
+        }).catchError((error) {
+          Utils.toastMessage(error.toString());
           loading.value = false;
         });
-      }).onError((error, stackTrace){
+      }).catchError((error) {
         Utils.toastMessage(error.toString());
         loading.value = false;
       });
 
-
-    }catch (e){
-      ErrorException();
+    } catch (e) {
+      if (e is AppException) {
+        Utils.toastMessage(e.toString()); // Show the exception message to the user
+      } else {
+        ErrorException();
+      }
       loading.value = false;
     }
-
   }
-
-
-
-
 }
