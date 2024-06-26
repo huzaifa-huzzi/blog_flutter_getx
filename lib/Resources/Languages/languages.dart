@@ -17,7 +17,7 @@ class Languages extends Translations{
        'pass_word':'Password',
        '_password':'Enter Password',
         '_login' : 'Login',
-         '_Account' : 'HAve an Account',
+         '_Account' : 'HAve an Account ?',
          '_sign' : 'Signup',
           '_signup Succesful' : 'SignUp Successful',
            '_user' : 'user',

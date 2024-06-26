@@ -45,11 +45,11 @@ class SignUpController extends GetxController {
           Utils.snackBar('_Registartion'.tr,  '_Registration successful'.tr);
           loading.value = false;
         }).onError((error, stackTrace){
-          ErrorException();
+         Utils.toastMessage(error.toString());
           loading.value = false;
         });
       }).onError((error, stackTrace){
-        ErrorException();
+        Utils.toastMessage(error.toString());
         loading.value = false;
       });
 

@@ -41,7 +41,7 @@ class _SignUpState extends State<SignUp> {
     final width = MediaQuery.sizeOf(context).width * 1;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Screen'.tr,style:GoogleFonts.lato(
+        title: Text('SignUp Screen',style:GoogleFonts.lato(
           textStyle: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,

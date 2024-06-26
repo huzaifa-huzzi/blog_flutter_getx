@@ -42,7 +42,6 @@ class LoginController extends GetxController {
               'returnSecureToken':true,
 
         }).then((value){
-          Utils.snackBar('User', 'User Authenticated');
           loading.value = false;
 
         }).onError((error,stackTrace){

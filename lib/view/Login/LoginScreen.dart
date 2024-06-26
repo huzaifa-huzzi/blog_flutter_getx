@@ -4,6 +4,7 @@ import 'package:blog_flutter_getx/Resources/Components/TextInputField/InputField
 import 'package:blog_flutter_getx/Routes/Routes_name.dart';
 import 'package:blog_flutter_getx/Utils/Utils.dart';
 import 'package:blog_flutter_getx/view_model/Controller/Login/LoginController.dart';
+import 'package:blog_flutter_getx/view_model/Services/SessionManager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final width = MediaQuery.sizeOf(context).width * 1;
     return Scaffold(
          appBar: AppBar(
-           title: Text('Login Screen'.tr,style:GoogleFonts.lato(
+           title: Text(SessionManager().userId.toString(),style:GoogleFonts.lato(
         textStyle: TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.bold,
