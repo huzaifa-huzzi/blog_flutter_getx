@@ -17,7 +17,7 @@ class SplashServices {
       if (user == null) {
         Get.toNamed(RouteName.loginScreen);
       } else {
-        Get.toNamed(RouteName.homeScreen);
+        Get.toNamed(RouteName.dashboardScreen);
       }
     });
   }

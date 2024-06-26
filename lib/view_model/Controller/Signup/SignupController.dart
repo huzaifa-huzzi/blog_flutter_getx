@@ -31,7 +31,7 @@ class SignUpController extends GetxController {
       await auth.createUserWithEmailAndPassword(email: email, password: password).then((value) {
         SessionManager().userId = value.user!.uid.toString();
         Utils.snackBar('_signin'.tr, '_signin successful'.tr);
-        Get.toNamed(RouteName.homeScreen);
+        Get.toNamed(RouteName.dashboardScreen);
         ref.child(value.user!.uid.toString()).set({
           'uid': value.user!.uid.toString(),
           'email': value.user!.email.toString(),
