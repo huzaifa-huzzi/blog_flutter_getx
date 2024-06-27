@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: AppColor.pinkColor,
       ),
-      body: SafeArea(
+      body: const SafeArea(
           child: Column(
             children: [
 
