@@ -28,6 +28,8 @@ class Languages extends Translations{
              '_Registartion' : 'Registered',
              '_Registration successful' : 'Registration successful ',
               '_message Forgot' : 'We have Send you email,Kindly check it out',
+               '_logout' : 'Logout',
+                '_logout message' : 'You are Logged out ',
 
 
   },
