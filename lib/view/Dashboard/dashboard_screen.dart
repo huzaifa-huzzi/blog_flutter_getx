@@ -1,8 +1,11 @@
 import 'package:blog_flutter_getx/Resources/Color/colors.dart';
+import 'package:blog_flutter_getx/Routes/Routes_name.dart';
 import 'package:blog_flutter_getx/view/Camera_Screen.dart';
 import 'package:blog_flutter_getx/view/Home/Home_Screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 
@@ -15,6 +18,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
+  final _auth = FirebaseAuth.instance;
 
 
 
@@ -32,16 +37,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   return [
     PersistentBottomNavBarItem(
       icon:const  Icon(Icons.home),
-      activeColorPrimary: CupertinoColors.activeBlue,
-      inactiveColorPrimary: CupertinoColors.systemGrey,
+      iconSize: 30,
+      activeColorPrimary: AppColor.whiteColor,
     ),
     PersistentBottomNavBarItem(
       icon:const  Icon(Icons.camera_enhance_outlined),
-      activeColorPrimary: CupertinoColors.activeBlue,
-      inactiveColorPrimary: CupertinoColors.systemGrey,
+      iconSize: 30,
+      activeColorPrimary: AppColor.whiteColor,
     ),
   ];
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +64,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       stateManagement: true, // Default is true.
       hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(15.0),
         colorBehindNavBar: Colors.white,
       ),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties:const  ItemAnimationProperties( // Navigation Bar's items animation properties.
+      itemAnimationProperties:const  ItemAnimationProperties(// Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 200),
         curve: Curves.ease,
       ),
@@ -80,12 +87,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 
 
-//Future<void> _handleLogout(BuildContext context) async {
-//     try {
-//       await _auth.signOut();
-//       Get.toNamed(RouteName.loginScreen);
-//     } catch (e) {
-//       print("Error logging out: $e");
-//       // Handle error if necessary
-//     }
-//   }
