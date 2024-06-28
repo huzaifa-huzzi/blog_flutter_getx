@@ -16,11 +16,10 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   final  cameraController = Get.put(CameraController());
-  final  textEditingController = TextEditingController();
 
   @override
   void dispose() {
-    textEditingController.dispose();
+    cameraController.controller.dispose();
     super.dispose();
   }
 
@@ -76,21 +75,23 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                       SizedBox(height: height * .03),
                       TextFormField(
-                        controller: textEditingController,
+                        controller:cameraController.controller,
                         decoration:const  InputDecoration(
                           labelText: 'Enter some text',
                           border: OutlineInputBorder(),
                         ),
                       ),
+                      SizedBox(height: height * .03),
+                      RoundButton(title: 'Upload Image',loading: cameraController.loading.value ,onPress: (){
+                        cameraController.uploadImage();
+                      })
                     ],
                   );
                 }
               }) ,
-
             ),
-            RoundButton(title: 'Upload Image', onPress: (){
 
-            })
+
           ],
         ),
       ),
