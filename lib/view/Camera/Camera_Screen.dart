@@ -2,7 +2,6 @@ import 'package:blog_flutter_getx/Resources/Components/RoundButton/RoundButton.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../Resources/Color/colors.dart';
 import '../../view_model/Controller/Camera/CameraController.dart';
 
@@ -15,7 +14,7 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  final  cameraController = Get.put(CameraController());
+  final cameraController = Get.put(CameraController());
 
   @override
   void dispose() {
@@ -26,7 +25,7 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height * 1;
-    final width = MediaQuery.sizeOf(context).width * 1 ;
+    final width = MediaQuery.sizeOf(context).width * 1;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -46,57 +45,48 @@ class _CameraScreenState extends State<CameraScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child:Obx(() {
-                if (cameraController.image.value == null) {
-                  return Text(
-                    'Select an Image',
-                    style: GoogleFonts.lato(
-                      fontSize: 25,
-                      color: Colors.black,
+            if (cameraController.image.value != null) // Show image if selected
+              Container(
+                height: height * 0.5,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Image.file(
+                  cameraController.image.value!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            SizedBox(height: height * 0.03),
+            Expanded(
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: cameraController.controller,
+                    minLines: 5, // Adjust this as per your need
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter some text',
+                      border: OutlineInputBorder(),
                     ),
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      Container(
-                        height: height * 0.3,
-                        width: width * 0.8,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: Image.file(
-                          cameraController.image.value!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(height: height * .03),
-                      TextFormField(
-                        controller:cameraController.controller,
-                        decoration:const  InputDecoration(
-                          labelText: 'Enter some text',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(height: height * .03),
-                      RoundButton(title: 'Upload Image',loading: cameraController.loading.value ,onPress: (){
-                        cameraController.uploadImage();
-                      })
-                    ],
-                  );
-                }
-              }) ,
+                  ),
+                  SizedBox(height: height * 0.03),
+                  RoundButton(
+                    title: 'Upload Image',
+                    loading: cameraController.loading.value,
+                    onPress: () {
+                      cameraController.uploadImage();
+                    },
+                  ),
+                ],
+              ),
             ),
-
-
           ],
         ),
       ),
       floatingActionButton: Padding(
-        padding:const  EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: FloatingActionButton(
           child: const Icon(Icons.camera_enhance_rounded),
           onPressed: () {
@@ -104,7 +94,6 @@ class _CameraScreenState extends State<CameraScreen> {
           },
         ),
       ),
-
     );
   }
 }
