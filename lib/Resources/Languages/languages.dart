@@ -30,6 +30,8 @@ class Languages extends Translations{
               '_message Forgot' : 'We have Send you email,Kindly check it out',
                '_logout' : 'Logout',
                 '_logout message' : 'You are Logged out ',
+                 '_image' : 'Image',
+                '_image message' : 'No Image Selected',
 
 
   },

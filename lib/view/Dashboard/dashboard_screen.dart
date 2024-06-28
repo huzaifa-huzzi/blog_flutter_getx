@@ -1,6 +1,6 @@
 import 'package:blog_flutter_getx/Resources/Color/colors.dart';
 import 'package:blog_flutter_getx/Routes/Routes_name.dart';
-import 'package:blog_flutter_getx/view/Camera_Screen.dart';
+import 'package:blog_flutter_getx/view/Camera/Camera_Screen.dart';
 import 'package:blog_flutter_getx/view/Home/Home_Screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
