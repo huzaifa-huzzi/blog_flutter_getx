@@ -14,12 +14,19 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  final CameraController cameraController = Get.put(CameraController());
+  final  cameraController = Get.put(CameraController());
+  final  textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height * 1;
-    final width = MediaQuery.sizeOf(context).height * 1;
+    final width = MediaQuery.sizeOf(context).width * 1 ;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -33,6 +40,7 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
         ),
         centerTitle: true,
+        automaticallyImplyLeading: true,
         backgroundColor: AppColor.pinkColor,
       ),
       body: Padding(
@@ -42,7 +50,7 @@ class _CameraScreenState extends State<CameraScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
-              child: Obx(() {
+              child:Obx(() {
                 if (cameraController.image.value == null) {
                   return Text(
                     'Select an Image',
@@ -56,7 +64,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     children: [
                       Container(
                         height: height * 0.3,
-                        width: width * 0.3,
+                        width: width * 0.8,
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey),
                         ),
@@ -65,9 +73,10 @@ class _CameraScreenState extends State<CameraScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: height * .03),
                       TextFormField(
-                        decoration: const InputDecoration(
+                        controller: textEditingController,
+                        decoration:const  InputDecoration(
                           labelText: 'Enter some text',
                           border: OutlineInputBorder(),
                         ),
@@ -75,16 +84,19 @@ class _CameraScreenState extends State<CameraScreen> {
                     ],
                   );
                 }
-              }),
-            ),
+              }) ,
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.camera_enhance_rounded),
-        onPressed: () {
-          cameraController.getGalleryImage();
-        },
+      floatingActionButton: Padding(
+        padding:const  EdgeInsets.all(16),
+        child: FloatingActionButton(
+          child: const Icon(Icons.camera_enhance_rounded),
+          onPressed: () {
+            cameraController.getGalleryImage();
+          },
+        ),
       ),
     );
   }
