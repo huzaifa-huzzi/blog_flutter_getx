@@ -1,3 +1,4 @@
+import 'package:blog_flutter_getx/Resources/Components/RoundButton/RoundButton.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -85,7 +86,11 @@ class _CameraScreenState extends State<CameraScreen> {
                   );
                 }
               }) ,
-            )
+
+            ),
+            RoundButton(title: 'Upload Image', onPress: (){
+
+            })
           ],
         ),
       ),
@@ -98,6 +103,7 @@ class _CameraScreenState extends State<CameraScreen> {
           },
         ),
       ),
+
     );
   }
 }
