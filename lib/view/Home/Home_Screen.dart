@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           stream: databaseRef.child(SessionManager().userId.toString()).onValue,
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
-              return const Center(child: CircularProgressIndicator());
+              return  Center(child: LoadingIndicator(indicatorType: Indicator.ballClipRotate,colors: [AppColor.pinkColor],));
             } else if (snapshot.hasData) {
               Map<dynamic, dynamic>? map = snapshot.data.snapshot.value as Map<dynamic, dynamic>?;
 
