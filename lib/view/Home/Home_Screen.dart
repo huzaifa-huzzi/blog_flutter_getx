@@ -1,17 +1,17 @@
-import 'package:blog_flutter_getx/Resources/Color/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 import '../../Data/Exception/appException.dart';
 import '../../Routes/Routes_name.dart';
 import '../../Utils/Utils.dart';
 import 'package:blog_flutter_getx/view_model/Controller/Camera/CameraController.dart';
 import 'package:blog_flutter_getx/view_model/Services/SessionManager.dart';
-import 'package:loading_indicator/loading_indicator.dart';
+import 'package:blog_flutter_getx/Resources/Color/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,21 +26,21 @@ class _HomeScreenState extends State<HomeScreen> {
   final cameraController = Get.put(CameraController());
   final sessionManager = SessionManager();
 
-  String? userId;
-  String currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
-  String currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
+  late String userId;
+  late String currentDateTime;
+  late String currentTime;
 
   @override
   void initState() {
     super.initState();
-    loadUserData();
+    initializeData();
   }
 
-  Future<void> loadUserData() async {
-    await sessionManager.loadUserId();
-    setState(() {
-      userId = sessionManager.userId;
-    });
+  Future<void> initializeData() async {
+    await sessionManager.init();
+    userId = sessionManager.userId ?? '';
+    currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
+    currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
   }
 
   @override
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: StreamBuilder(
-          stream: databaseRef.child(userId ?? '').onValue,
+          stream: databaseRef.child(userId).onValue,
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
               return const Center(child: CircularProgressIndicator());
