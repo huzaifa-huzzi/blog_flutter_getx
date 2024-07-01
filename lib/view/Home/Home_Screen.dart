@@ -24,8 +24,24 @@ class _HomeScreenState extends State<HomeScreen> {
   final auth = FirebaseAuth.instance;
   final databaseRef = FirebaseDatabase.instance.ref().child('user');
   final cameraController = Get.put(CameraController());
-  final currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
-  final currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
+  final sessionManager = SessionManager();
+
+  String? userId;
+  String currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
+  String currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    await sessionManager.loadUserId();
+    setState(() {
+      userId = sessionManager.userId;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              auth.signOut().then((value) {
+              auth.signOut().then((value) async {
+                await sessionManager.clearSession(); // Clear session data on logout
                 Utils.snackBar('_logout'.tr, '_logout message'.tr);
                 Get.toNamed(RouteName.loginScreen);
               }).catchError((error, stackTrace) {
@@ -63,12 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: StreamBuilder(
-          stream: databaseRef.child(SessionManager().userId.toString()).onValue,
+          stream: databaseRef.child(userId ?? '').onValue,
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
-              return  Center(child: LoadingIndicator(indicatorType: Indicator.ballClipRotate,colors: [AppColor.pinkColor],));
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {
-              Map<dynamic, dynamic>? map = snapshot.data.snapshot.value as Map<dynamic, dynamic>?;
+              Map<dynamic, dynamic>? map = snapshot.data!.value as Map<dynamic, dynamic>?;
 
               if (map != null) {
                 String? imageUrl = map['imageUrl'];
@@ -87,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '$currentDateTime',
+                                    currentDateTime,
                                     style: GoogleFonts.lato(
                                       textStyle: const TextStyle(
                                         fontSize: 15,
@@ -97,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    '$currentTime',
+                                    currentTime,
                                     style: GoogleFonts.lato(
                                       textStyle: const TextStyle(
                                         fontSize: 15,
@@ -120,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 text ?? '',
                                 style: GoogleFonts.lato(
-                                  textStyle:const  TextStyle(
+                                  textStyle: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.normal,
                                     color: Colors.black,
