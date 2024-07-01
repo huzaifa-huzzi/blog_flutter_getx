@@ -32,6 +32,8 @@ class Languages extends Translations{
                 '_logout message' : 'You are Logged out ',
                  '_image' : 'Image',
                 '_image message' : 'No Image Selected',
+                  '_succes' : 'Blog Added',
+                   '_suces blog' : 'Your Blog has been added Successfully',
 
 
   },

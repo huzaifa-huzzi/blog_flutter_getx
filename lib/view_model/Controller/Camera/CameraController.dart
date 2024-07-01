@@ -56,7 +56,7 @@ class CameraController extends GetxController {
       });
 
       if (kDebugMode) {
-        print('Image and text uploaded successfully.');
+        Utils.snackBar('_succes'.tr, '_suces blog'.tr);
       }
       loading.value = false;
     } catch (error) {
