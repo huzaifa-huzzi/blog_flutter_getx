@@ -3,10 +3,9 @@ import 'package:blog_flutter_getx/Utils/Utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:flutter/material.dart';
 import '../../Services/SessionManager.dart';
 
 class CameraController extends GetxController {
@@ -34,14 +33,11 @@ class CameraController extends GetxController {
     }
   }
 
-  // Functions for the uploadImage
+  // Function to upload image to Firebase Storage and save data to Realtime Database
   Future<void> uploadImage() async {
-    if (image.value == null) {
-      Utils.snackBar('Error', 'Please select an image first');
-      return;
-    }
 
     loading.value = true;
+
     Reference ref = storage.ref().child('/ProfilePicture/${SessionManager().userId.toString()}');
 
     try {
@@ -50,13 +46,13 @@ class CameraController extends GetxController {
       String downloadUrl = await snapshot.ref.getDownloadURL();
 
       // Save the image URL and text to the database
-      await databaseRef.child('Profile Picture').set({
+      await databaseRef.child(SessionManager().userId.toString()).set({
         'imageUrl': downloadUrl,
         'text': controller.text,
       });
 
       if (kDebugMode) {
-        Utils.snackBar('_succes'.tr, '_suces blog'.tr);
+        print('Image and text uploaded successfully.');
       }
       loading.value = false;
     } catch (error) {
@@ -66,4 +62,5 @@ class CameraController extends GetxController {
       loading.value = false;
     }
   }
+
 }
