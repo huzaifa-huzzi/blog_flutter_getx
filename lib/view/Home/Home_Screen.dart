@@ -20,9 +20,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final auth = FirebaseAuth.instance;
   String currentDate = DateFormat('MMMM dd, yyyy').format(DateTime.now());
+  String currentDateTime = DateFormat('EEEE ,HH:mm:ss').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height * 1;
+    final width = MediaQuery.of(context).size.width * 1;
     return Scaffold(
+
       appBar: AppBar(
         title: Text('Home Screen',style:GoogleFonts.lato(
           textStyle: TextStyle(
@@ -47,21 +51,30 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
           child: Column(
             children: [
-              Card(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                       Text('$currentDate',style:GoogleFonts.lato(
-                         textStyle: TextStyle(
-                           fontSize: 15,
-                           fontWeight: FontWeight.bold,
-                           color: AppColor.blackColor,
-                         ),),),
-
-                      ],
-                    )
-                  ],
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: ),
+                child: Card(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                         Text('$currentDate',style:GoogleFonts.lato(
+                           textStyle: TextStyle(
+                             fontSize: 15,
+                             fontWeight: FontWeight.bold,
+                             color: AppColor.blackColor,
+                           ),),),
+                          Text('$currentDateTime',style:GoogleFonts.lato(
+                            textStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.blackColor,
+                            ),),),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
