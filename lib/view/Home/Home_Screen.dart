@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   final auth = FirebaseAuth.instance;
-
+  String currentDate = DateFormat('MMMM dd, yyyy').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,10 +44,26 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: AppColor.pinkColor,
       ),
-      body: const SafeArea(
+      body: SafeArea(
           child: Column(
             children: [
+              Card(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                       Text('$currentDate',style:GoogleFonts.lato(
+                         textStyle: TextStyle(
+                           fontSize: 15,
+                           fontWeight: FontWeight.bold,
+                           color: AppColor.blackColor,
+                         ),),),
 
+                      ],
+                    )
+                  ],
+                ),
+              )
             ],
           )
       ),
