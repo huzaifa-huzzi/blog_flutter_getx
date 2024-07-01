@@ -1,3 +1,4 @@
+import 'package:blog_flutter_getx/Resources/Color/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -63,11 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: StreamBuilder(
           stream: databaseRef.child(SessionManager().userId.toString()).onValue,
-          builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+          builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {
-              Map<dynamic, dynamic>? map = snapshot.data!.value as Map<dynamic, dynamic>?;
+              Map<dynamic, dynamic>? map = snapshot.data.snapshot.value as Map<dynamic, dynamic>?;
 
               if (map != null) {
                 String? imageUrl = map['imageUrl'];
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 text ?? '',
                                 style: GoogleFonts.lato(
-                                  textStyle: TextStyle(
+                                  textStyle:const  TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.normal,
                                     color: Colors.black,
