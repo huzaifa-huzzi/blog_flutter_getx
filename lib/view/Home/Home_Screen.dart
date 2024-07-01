@@ -52,27 +52,27 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: ),
+                padding: EdgeInsets.symmetric(vertical: height * .08 ),
                 child: Card(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                         Text('$currentDate',style:GoogleFonts.lato(
-                           textStyle: TextStyle(
-                             fontSize: 15,
-                             fontWeight: FontWeight.bold,
-                             color: AppColor.blackColor,
-                           ),),),
-                          Text('$currentDateTime',style:GoogleFonts.lato(
-                            textStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.blackColor,
-                            ),),),
-                        ],
-                      )
+                       Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                           Text('$currentDate',style:GoogleFonts.lato(
+                             textStyle: TextStyle(
+                               fontSize: 15,
+                               fontWeight: FontWeight.bold,
+                               color: AppColor.blackColor,
+                             ),),),
+                            Text('$currentDateTime',style:GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.blackColor,
+                              ),),),
+                          ],
+                        ),
                     ],
                   ),
                 ),
