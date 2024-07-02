@@ -66,11 +66,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   controller.passwordFocus.value);
                             },
                             obsecureText: false,
-                            hint: 'Em_ail'.tr,
+                            hint: 'Email'.tr,
                             keyboardType: TextInputType.text,
                             onValidator: (value) {
                               if (value!.isEmpty) {
-                                Utils.snackBar('Em_ail'.tr, '_email'.tr);
+                                Utils.snackBar('Email'.tr, 'Enter email'.tr);
                               }
                             },
                             icon: Icons.email,
@@ -81,11 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             focusNode: controller.passwordFocus.value,
                             onFieldSubmitted: (value) {},
                             obsecureText: true,
-                            hint: 'pass_word'.tr,
-                            keyboardType: TextInputType.number,
+                            hint: 'Password'.tr,
+                            keyboardType: TextInputType.text,
                             onValidator: (value) {
                               if (value!.isEmpty) {
-                                Utils.snackBar('pass_word'.tr, '_email'.tr);
+                                Utils.snackBar('Password'.tr, 'Enter password'.tr);
                               }
                             },
                             icon: Icons.lock,
@@ -119,10 +119,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: height * .04),
+
                   RoundButton(
-                    title: '_login'.tr,
+                    title: 'Login'.tr,
                     loading: controller.loading.value,
-                    onPress: login,
+                    onPress: () async {
+                      if (_formKey.currentState!.validate()) {
+                        String email = controller.emailController.value.text;
+                        String password = controller.passwordController.value.text;
+
+                        try {
+                          // Attempt login
+                           controller.login(email, password, context);
+
+                          // If successful, fetch blogs for the logged-in user
+                          SessionManager sessionManager = SessionManager();
+                          await sessionManager.init(); // Initialize session manager
+                          List<Map<String, dynamic>> blogs = sessionManager.blogs;
+
+                          // Navigate to DashboardScreen with blogs
+                          Get.offNamed(RouteName.dashboardScreen, arguments: blogs);
+                        } catch (e) {
+                          Utils.snackBar('Login Error', e.toString());
+                        }
+                      }
+                    },
                   ),
                   SizedBox(height: height * .04),
                   InkWell(
