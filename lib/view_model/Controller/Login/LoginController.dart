@@ -32,7 +32,7 @@ class LoginController extends GetxController {
 
     try{
       await auth.signInWithEmailAndPassword(email: email, password: password).then((value){
-        SessionManager() = value.user!.uid.toString();
+        SessionManager().userId = value.user!.uid.toString();
         Get.toNamed(RouteName.dashboardScreen);
         Utils.snackBar('Login', 'Login Successful');
         loading.value = false;

@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 import '../../Data/Exception/appException.dart';
 import '../../Routes/Routes_name.dart';
@@ -24,25 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final auth = FirebaseAuth.instance;
   final databaseRef = FirebaseDatabase.instance.ref().child('user');
   final cameraController = Get.put(CameraController());
-  final sessionManager = SessionManager();
   final currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
   final currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
 
   @override
-  void initState() {
-    super.initState();
-    _loadSession();
-  }
-
-  Future<void> _loadSession() async {
-    await sessionManager.loadSession();
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 1;
-    final width = MediaQuery.of(context).size.width * 1;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             onPressed: () {
               auth.signOut().then((value) async {
-                await sessionManager.setUserId(null);
                 Utils.snackBar('_logout'.tr, '_logout message'.tr);
                 Get.toNamed(RouteName.loginScreen);
               }).catchError((error, stackTrace) {
@@ -75,85 +61,92 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColor.pinkColor,
       ),
       body: SingleChildScrollView(
-        child: StreamBuilder(
-          stream: sessionManager.userId != null
-              ? databaseRef.child(sessionManager.userId!).onValue
-              : null,
-          builder: (context, AsyncSnapshot snapshot) {
+        child: StreamBuilder<DatabaseEvent>(
+          stream: databaseRef.child(SessionManager().userId.toString()).child('blogs').orderByChild('timestamp').onValue,
+          builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
-            } else if (!snapshot.hasData || snapshot.data == null) {
-              return const Center(child: Text('No data available'));
+            } else if (!snapshot.hasData || snapshot.data?.snapshot.value == null) {
+              return const Center(child: Text('No blogs available'));
             } else {
-              Map<dynamic, dynamic>? map = snapshot.data!.snapshot.value as Map<dynamic, dynamic>?;
+              Map<dynamic, dynamic>? blogsMap = snapshot.data?.snapshot.value as Map<dynamic, dynamic>?;
+              List<Map<dynamic, dynamic>> blogsList = blogsMap?.entries.map((entry) => Map<dynamic, dynamic>.from(entry.value)).toList() ?? [];
 
-              if (map != null) {
-                String? imageUrl = map['imageUrl'];
-                String? text = map['text'];
+              return Column(
+                children: blogsList.map((blogData) {
+                  String imageUrl = blogData['imageUrl'];
+                  String text = blogData['text'];
+                  String date = DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(blogData['timestamp']));
+                  String time = DateFormat('EEE, HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(blogData['timestamp']));
 
-                return SafeArea(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: width * .02, vertical: height * .04),
-                        child: Card(
-                          elevation: 10,
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    currentDateTime,
-                                    style: GoogleFonts.lato(
-                                      textStyle: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
-                                      ),
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: width * .05, vertical: height * .03),
+                    child: Card(
+                      elevation: 10,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  date,
+                                  style: GoogleFonts.lato(
+                                    textStyle: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black,
                                     ),
-                                  ),
-                                  Text(
-                                    currentTime,
-                                    style: GoogleFonts.lato(
-                                      textStyle: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: height * .02),
-                              Container(
-                                height: 200,
-                                width: 300,
-                                child: imageUrl != null
-                                    ? Image.network(imageUrl)
-                                    : const Center(child: Text('No Blog Available')),
-                              ),
-                              SizedBox(height: height * 0.02),
-                              Text(
-                                text ?? '',
-                                style: GoogleFonts.lato(
-                                  textStyle: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.black,
                                   ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  time,
+                                  style: GoogleFonts.lato(
+                                    textStyle: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                          SizedBox(height: height * .02),
+                          Container(
+                            height: height * .3,
+                            width: width * .7,
+                            child: imageUrl.isNotEmpty
+                                ? ClipRRect(
+                              borderRadius: BorderRadius.circular(15.0), // Adjust the radius as needed
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.cover, // Adjust the image fitting as needed
+                              ),
+                            )
+                                : Padding(
+                                padding: EdgeInsets.symmetric(vertical: height * 0.9),
+                                child: const Center(child: Text('No Blog Available'))),
+                          ),
+                          SizedBox(height: height * 0.02),
+                          Text(
+                            text,
+                            style: GoogleFonts.lato(
+                              textStyle: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: height * 0.02),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              } else {
-                return const Center(child: Text('Data not available'));
-              }
+                    ),
+                  );
+                }).toList(),
+              );
             }
           },
         ),

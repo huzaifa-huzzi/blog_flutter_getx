@@ -35,20 +35,20 @@ class CameraController extends GetxController {
 
   // Function to upload image to Firebase Storage and save data to Realtime Database
   Future<void> uploadImage() async {
-
     loading.value = true;
 
-    Reference ref = storage.ref().child('/ProfilePicture/${SessionManager().userId.toString()}');
-
     try {
+      // Upload the image to Firebase Storage
+      Reference ref = storage.ref().child('ProfilePicture/${SessionManager().userId}/blogs/${DateTime.now().millisecondsSinceEpoch}');
       UploadTask uploadTask = ref.putFile(image.value!);
       TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
       String downloadUrl = await snapshot.ref.getDownloadURL();
 
-      // Save the image URL and text to the database
-      await databaseRef.child(SessionManager().userId.toString()).set({
+      // Save the image URL and text to the database under the user's blogs node
+      await databaseRef.child(SessionManager().userId.toString()).child('blogs').push().set({
         'imageUrl': downloadUrl,
         'text': controller.text,
+        'timestamp': ServerValue.timestamp,
       });
 
       if (kDebugMode) {
@@ -62,5 +62,4 @@ class CameraController extends GetxController {
       loading.value = false;
     }
   }
-
 }
