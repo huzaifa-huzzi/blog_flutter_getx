@@ -25,9 +25,19 @@ class _HomeScreenState extends State<HomeScreen> {
   final databaseRef = FirebaseDatabase.instance.ref().child('user');
   final cameraController = Get.put(CameraController());
   final sessionManager = SessionManager();
- final  currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
- final  currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
+  final currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
+  final currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
 
+  @override
+  void initState() {
+    super.initState();
+    _loadSession();
+  }
+
+  Future<void> _loadSession() async {
+    await sessionManager.loadSession();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             onPressed: () {
               auth.signOut().then((value) async {
+                await sessionManager.setUserId(null);
                 Utils.snackBar('_logout'.tr, '_logout message'.tr);
                 Get.toNamed(RouteName.loginScreen);
               }).catchError((error, stackTrace) {
@@ -65,12 +76,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: StreamBuilder(
-          stream: databaseRef.child(Sess).onValue,
+          stream: sessionManager.userId != null
+              ? databaseRef.child(sessionManager.userId!).onValue
+              : null,
           builder: (context, AsyncSnapshot snapshot) {
-            if (!snapshot.hasData || snapshot.data == null) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasData) {
-              Map<dynamic, dynamic>? map = snapshot.data!.value as Map<dynamic, dynamic>?;
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const Center(child: Text('No data available'));
+            } else {
+              Map<dynamic, dynamic>? map = snapshot.data!.snapshot.value as Map<dynamic, dynamic>?;
 
               if (map != null) {
                 String? imageUrl = map['imageUrl'];
@@ -137,10 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               } else {
-                return const Text('Data not available');
+                return const Center(child: Text('Data not available'));
               }
-            } else {
-              return const Text('Something went wrong');
             }
           },
         ),

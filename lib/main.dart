@@ -2,6 +2,7 @@
 import 'package:blog_flutter_getx/Resources/Languages/languages.dart';
 import 'package:blog_flutter_getx/Routes/Routes_initializing.dart';
 import 'package:blog_flutter_getx/view/SplashScreen/splash_Screen.dart';
+import 'package:blog_flutter_getx/view_model/Services/SessionManager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  await SessionManager().loadSession();
   runApp(const MyApp());
 }
 
