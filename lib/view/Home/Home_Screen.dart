@@ -25,23 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final databaseRef = FirebaseDatabase.instance.ref().child('user');
   final cameraController = Get.put(CameraController());
   final sessionManager = SessionManager();
+ final  currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
+ final  currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
 
-  late String userId;
-  late String currentDateTime;
-  late String currentTime;
-
-  @override
-  void initState() {
-    super.initState();
-    initializeData();
-  }
-
-  Future<void> initializeData() async {
-    await sessionManager.init();
-    userId = sessionManager.userId ?? '';
-    currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
-    currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             onPressed: () {
               auth.signOut().then((value) async {
-                await sessionManager.clearSession(); // Clear session data on logout
                 Utils.snackBar('_logout'.tr, '_logout message'.tr);
                 Get.toNamed(RouteName.loginScreen);
               }).catchError((error, stackTrace) {
@@ -80,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: StreamBuilder(
-          stream: databaseRef.child(userId).onValue,
+          stream: databaseRef.child(Sess).onValue,
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
               return const Center(child: CircularProgressIndicator());
