@@ -1,8 +1,11 @@
 
 import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class SessionManager {
+  DatabaseReference _database = FirebaseDatabase.instance.ref();
   static final SessionManager _instance = SessionManager._internal();
 
   factory SessionManager() => _instance;
@@ -10,47 +13,82 @@ class SessionManager {
   SessionManager._internal();
 
   String? _userId;
-  List<Map<String, dynamic>> _blogs = []; // Store blogs here
+  List<Map<String, dynamic>> _blogs = [];
 
   String? get userId => _userId;
+  List<Map<String, dynamic>> get blogs => _blogs;
 
   set userId(String? userId) {
     _userId = userId;
-    _saveUserIdToPrefs(userId); // Save userId to SharedPreferences
+    _saveUserIdToPrefs(userId);
   }
 
-  // Initialize SessionManager
   Future<void> init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _userId = prefs.getString('userId');
-    // Initialize blogs if userId is available
     if (_userId != null) {
       _blogs = await _fetchBlogsForUser(_userId!);
+      await _saveBlogsToPrefs(_blogs);
     }
   }
 
-  // Get list of blogs
-  List<Map<String, dynamic>> get blogs => _blogs;
-
-  // Method to fetch blogs for a user (replace with your implementation)
   Future<List<Map<String, dynamic>>> _fetchBlogsForUser(String userId) async {
-    // Replace this with actual logic to fetch blogs from Firebase or other backend
-    return []; // Dummy implementation, replace with actual data fetching
+    try {
+      DataSnapshot snapshot = await _database.child('userBlogs/$userId').get();
+
+      if (!snapshot.exists) {
+        print('No blogs found for user $userId');
+        return [];
+      }
+
+      List<Map<String, dynamic>> fetchedBlogs = [];
+
+      if (snapshot.value is Map) {
+        Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
+        values.forEach((key, value) {
+          fetchedBlogs.add({
+            'id': key,
+            'title': value['title'],
+            'content': value['content'],
+            'imageUrl': value['imageUrl'],
+            'timestamp': value['timestamp'],
+          });
+        });
+      } else {
+        print('Fetched data is not in the expected format.');
+      }
+
+      print('Fetched blogs for user $userId: $fetchedBlogs');
+      return fetchedBlogs;
+    } catch (e) {
+      print('Error fetching blogs for user $userId: $e');
+      return [];
+    }
   }
 
-  // Save userId to SharedPreferences
   Future<void> _saveUserIdToPrefs(String? userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('userId', userId ?? '');
   }
 
+  Future<void> _saveBlogsToPrefs(List<Map<String, dynamic>> blogs) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String blogsJson = jsonEncode(blogs);
+    await prefs.setString('blogs', blogsJson);
+  }
 
-  // Clear user session
+  Future<void> _loadBlogsFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String blogsJson = prefs.getString('blogs') ?? '';
+    if (blogsJson.isNotEmpty) {
+      _blogs = jsonDecode(blogsJson).map((e) => Map<String, dynamic>.from(e)).toList();
+    }
+  }
+
   Future<void> clearUser() async {
     _userId = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('userId');
+    await prefs.remove('blogs');
   }
-
-// Add methods for updating blogs, profile picture, etc. as needed
 }

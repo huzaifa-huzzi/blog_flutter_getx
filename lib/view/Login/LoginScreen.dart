@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:blog_flutter_getx/Resources/Color/colors.dart';
 import 'package:blog_flutter_getx/Resources/Components/RoundButton/RoundButton.dart';
 import 'package:blog_flutter_getx/Resources/Components/TextInputField/InputField.dart';
 import 'package:blog_flutter_getx/Routes/Routes_name.dart';
 import 'package:blog_flutter_getx/Utils/Utils.dart';
 import 'package:blog_flutter_getx/view_model/Controller/Login/LoginController.dart';
-import 'package:blog_flutter_getx/view_model/Services/SessionManager.dart'; // Import SessionManager
+import 'package:blog_flutter_getx/view_model/Services/SessionManager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -119,33 +118,38 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: height * .04),
-
                   RoundButton(
-                    title: 'Login'.tr,
-                    loading: controller.loading.value,
-                    onPress: () async {
-                      if (_formKey.currentState!.validate()) {
-                        String email = controller.emailController.value.text;
-                        String password = controller.passwordController.value.text;
+    title: 'Login'.tr,
+    loading: controller.loading.value,
+    onPress: () async {
+    if (_formKey.currentState!.validate()) {
+    String email = controller.emailController.value.text;
+    String password = controller.passwordController.value.text;
 
-                        try {
-                          // Attempt login
-                           controller.login(email, password, context);
+    try {
+    // Attempt login
+    controller.login(email, password, context);
 
-                          // If successful, fetch blogs for the logged-in user
-                          SessionManager sessionManager = SessionManager();
-                          await sessionManager.init(); // Initialize session manager
-                          List<Map<String, dynamic>> blogs = sessionManager.blogs;
+    // If successful, load the stored blogs
+    SessionManager sessionManager = SessionManager();
+    await sessionManager.init(); // Initialize session manager
+    await sessionManager._loadBlogsFromPrefs(); // Load stored blogs
+    List<Map<String, dynamic>> blogs = sessionManager.blogs;
 
-                          // Navigate to DashboardScreen with blogs
-                          Get.offNamed(RouteName.dashboardScreen, arguments: blogs);
-                        } catch (e) {
-                          Utils.snackBar('Login Error', e.toString());
-                        }
-                      }
-                    },
+    if (blogs.isNotEmpty) {
+    // Navigate to DashboardScreen with blogs
+    Get.offNamed(RouteName.dashboardScreen, arguments: blogs);
+    } else {
+    Utils.snackBar('No Blogs', 'No blogs available for this user.');
+    }
+    } catch (e) {
+    Utils.snackBar('Login Error', e.toString());
+    }
+    }
+    },
                   ),
-                  SizedBox(height: height * .04),
+
+    SizedBox(height: height * .04),
                   InkWell(
                     onTap: () {
                       Get.toNamed(RouteName.signupScreen);
