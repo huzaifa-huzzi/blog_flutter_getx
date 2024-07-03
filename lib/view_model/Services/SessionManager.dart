@@ -72,5 +72,6 @@ class SessionManager {
     _userId = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('userId');
+    _blogs = []; // Clear blogs when user logs out
   }
 }
