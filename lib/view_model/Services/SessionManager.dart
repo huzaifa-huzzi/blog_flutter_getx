@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,9 +25,13 @@ class SessionManager {
   Future<void> init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _userId = prefs.getString('userId');
+    await _loadBlogsFromPrefs();
     if (_userId != null) {
-      _blogs = await _fetchBlogsForUser(_userId!);
-      await _saveBlogsToPrefs(_blogs);
+      List<Map<String, dynamic>> fetchedBlogs = await _fetchBlogsForUser(_userId!);
+      if (fetchedBlogs.isNotEmpty) {
+        _blogs = fetchedBlogs;
+        await _saveBlogsToPrefs(_blogs);
+      }
     }
   }
 
@@ -81,7 +84,9 @@ class SessionManager {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String blogsJson = prefs.getString('blogs') ?? '';
     if (blogsJson.isNotEmpty) {
-      _blogs = jsonDecode(blogsJson).map((e) => Map<String, dynamic>.from(e)).toList();
+      _blogs = (jsonDecode(blogsJson) as List)
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
     }
   }
 

@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: Text.rich(
                         TextSpan(
-                          style: TextStyle(),
+                          style: const TextStyle(),
                           children: [
                             TextSpan(
                               text: 'Forgot Password ? ',
@@ -119,37 +119,35 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: height * .04),
                   RoundButton(
-    title: 'Login'.tr,
-    loading: controller.loading.value,
-    onPress: () async {
-    if (_formKey.currentState!.validate()) {
-    String email = controller.emailController.value.text;
-    String password = controller.passwordController.value.text;
+                    title: 'Login'.tr,
+                    loading: controller.loading.value,
+                    onPress: () async {
+                      if (_formKey.currentState!.validate()) {
+                        String email = controller.emailController.value.text;
+                        String password = controller.passwordController.value.text;
 
-    try {
-    // Attempt login
-    controller.login(email, password, context);
+                        try {
+                          // Attempt login
+                          controller.login(email, password, context);
 
-    // If successful, load the stored blogs
-    SessionManager sessionManager = SessionManager();
-    await sessionManager.init(); // Initialize session manager
-    await sessionManager._loadBlogsFromPrefs(); // Load stored blogs
-    List<Map<String, dynamic>> blogs = sessionManager.blogs;
+                          // If successful, load the stored blogs
+                          SessionManager sessionManager = SessionManager();
+                          await sessionManager.init(); // Initialize session manager
+                          List<Map<String, dynamic>> blogs = sessionManager.blogs;
 
-    if (blogs.isNotEmpty) {
-    // Navigate to DashboardScreen with blogs
-    Get.offNamed(RouteName.dashboardScreen, arguments: blogs);
-    } else {
-    Utils.snackBar('No Blogs', 'No blogs available for this user.');
-    }
-    } catch (e) {
-    Utils.snackBar('Login Error', e.toString());
-    }
-    }
-    },
+                          if (blogs.isNotEmpty) {
+                            // Navigate to DashboardScreen with blogs
+                            Get.offNamed(RouteName.dashboardScreen, arguments: blogs);
+                          } else {
+                            Utils.snackBar('No Blogs', 'No blogs available for this user.');
+                          }
+                        } catch (e) {
+                          Utils.snackBar('Login Error', e.toString());
+                        }
+                      }
+                    },
                   ),
-
-    SizedBox(height: height * .04),
+                  SizedBox(height: height * .04),
                   InkWell(
                     onTap: () {
                       Get.toNamed(RouteName.signupScreen);
@@ -157,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text.rich(
                       TextSpan(
                         text: 'Don\'t Have an Account ?',
-                        style: TextStyle(),
+                        style: const TextStyle(),
                         children: [
                           TextSpan(
                             text: 'Sign Up ',
