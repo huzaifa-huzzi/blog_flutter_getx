@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final auth = FirebaseAuth.instance;
-  final databaseRef = FirebaseDatabase.instance.ref().child('user');
+  final databaseRef = FirebaseDatabase.instance.ref().child('ProfilePicture'); // Updated path to 'ProfilePicture'
   final cameraController = Get.put(CameraController());
   final currentDateTime = DateFormat('MMM dd, yyyy').format(DateTime.now());
   final currentTime = DateFormat('EEE, HH:mm:ss').format(DateTime.now());
