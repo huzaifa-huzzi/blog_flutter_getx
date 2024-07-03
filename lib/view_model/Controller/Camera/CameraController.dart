@@ -5,13 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/material.dart';
 import '../../Services/SessionManager.dart';
+import 'package:flutter/material.dart';
 
 class CameraController extends GetxController {
   var image = Rx<File?>(null);
   final picker = ImagePicker();
-  final databaseRef = FirebaseDatabase.instance.ref().child('user');
+  final databaseRef = FirebaseDatabase.instance.ref();
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   // TextEditingController
@@ -38,14 +38,21 @@ class CameraController extends GetxController {
     loading.value = true;
 
     try {
+      if (image.value == null) {
+        Utils.snackBar('Error', 'No image selected');
+        loading.value = false;
+        return;
+      }
+
       // Upload the image to Firebase Storage
-      Reference ref = storage.ref().child('ProfilePicture/${SessionManager().userId}/blogs/${DateTime.now().millisecondsSinceEpoch}');
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref = storage.ref().child('ProfilePicture/${SessionManager().userId}/blogs/$fileName');
       UploadTask uploadTask = ref.putFile(image.value!);
-      TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
+      TaskSnapshot snapshot = await uploadTask;
       String downloadUrl = await snapshot.ref.getDownloadURL();
 
       // Save the image URL and text to the database under the user's blogs node
-      await databaseRef.child(SessionManager().userId.toString()).child('blogs').push().set({
+      await databaseRef.child('ProfilePicture').child(SessionManager().userId!).child('blogs').push().set({
         'imageUrl': downloadUrl,
         'text': controller.text,
         'timestamp': ServerValue.timestamp,
@@ -60,6 +67,7 @@ class CameraController extends GetxController {
         print('Error uploading image: $error');
       }
       loading.value = false;
+      Utils.snackBar('Error', 'Failed to upload image.');
     }
   }
 }
